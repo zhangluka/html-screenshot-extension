@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HTML Screenshot · Promo</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,400&family=Inter:wght@400;500;600&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #faf9f5;
+    --bg-secondary: #f0eee6;
+    --bg-tertiary: #e8e6dc;
+    --text: #141413;
+    --text-secondary: #5e5d59;
+    --text-tertiary: #87867f;
+    --accent: #d97757;
+    --accent-deep: #c6613f;
+    --border: rgba(20, 20, 19, 0.1);
+  }
+
+  body {
+    width: 100vw;
+    height: 100vh;
+    background: var(--bg);
+    font-family: 'Source Serif 4', Georgia, serif;
+    color: var(--text);
+    overflow: auto;
+    position: relative;
+  }
+
+  /* Background grid pattern */
+  .grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 60px 60px;
+    opacity: 0.4;
+  }
+
+  /* Main layout */
+  .container {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 5vw;
+    gap: 5vw;
+  }
+
+  /* Left side - content */
+  .content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    background: var(--accent);
+    color: var(--bg);
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: 100vw;
+    width: fit-content;
+    margin-bottom: 32px;
+  }
+
+  h1 {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(36px, 5vw, 72px);
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    margin-bottom: 24px;
+  }
+
+  h1 .accent { color: var(--accent); }
+
+  .subtitle {
+    font-size: clamp(16px, 1.5vw, 22px);
+    font-weight: 300;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    max-width: 480px;
+    margin-bottom: 48px;
+  }
+
+  .features {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+
+  .feature {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    color: var(--text-secondary);
+  }
+
+  .feature-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 28px;
+    background: var(--text);
+    color: var(--bg);
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    border-radius: 6px;
+    text-decoration: none;
+    width: fit-content;
+    transition: background 0.2s;
+  }
+
+  .cta:hover { background: #3d3d3a; }
+
+  .cta svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* Right side - visual demo */
+  .demo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+
+  /* Browser window mockup */
+  .browser {
+    width: 100%;
+    max-width: 560px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 20px 60px rgba(20, 20, 19, 0.12), 0 0 0 1px var(--border);
+    overflow: hidden;
+  }
+
+  .browser-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .browser-dots {
+    display: flex;
+    gap: 6px;
+  }
+
+  .browser-dots span {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--bg-tertiary);
+  }
+
+  .browser-url {
+    flex: 1;
+    height: 24px;
+    background: var(--bg);
+    border-radius: 4px;
+    margin-left: 8px;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    color: var(--text-tertiary);
+  }
+
+  .browser-content {
+    height: clamp(200px, 25vw, 320px);
+    background: var(--bg);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Simulated design content */
+  .design-preview {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    padding: 30px;
+  }
+
+  .design-card {
+    background: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    border: 1px solid var(--border);
+  }
+
+  .design-card .bar {
+    height: 4px;
+    border-radius: 2px;
+    background: var(--bg-tertiary);
+  }
+
+  .design-card .bar.accent { background: var(--accent); }
+  .design-card .bar.short { width: 60%; }
+  .design-card .bar.medium { width: 80%; }
+
+  .design-card .block {
+    height: 60px;
+    border-radius: 4px;
+    background: var(--bg-secondary);
+  }
+
+  /* Crop overlay */
+  .crop-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 2px dashed var(--accent);
+    border-radius: 4px;
+    pointer-events: none;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  .crop-overlay.r169 { width: 85%; height: 48%; }
+  .crop-overlay.r43 { width: 64%; height: 48%; }
+  .crop-overlay.r52 { width: 85%; height: 34%; }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  .crop-label {
+    position: absolute;
+    top: -28px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--accent);
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 100vw;
+    white-space: nowrap;
+  }
+
+  /* Ratio selector mockup */
+  .ratio-selector {
+    margin-top: 24px;
+    display: flex;
+    gap: 8px;
+  }
+
+  .ratio-pill {
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    cursor: default;
+    transition: all 0.2s;
+  }
+
+  .ratio-pill.active {
+    background: var(--text);
+    color: var(--bg);
+    border-color: var(--text);
+  }
+
+  .ratio-pill.dimmed {
+    opacity: 0.5;
+  }
+
+  /* Floating elements */
+  .float-badge {
+    position: absolute;
+    background: #fff;
+    border-radius: 8px;
+    padding: 10px 14px;
+    box-shadow: 0 8px 24px rgba(20, 20, 19, 0.1);
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .float-badge.top-right {
+    top: 4vw;
+    right: 2vw;
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .float-badge.bottom-left {
+    bottom: 8vw;
+    left: 2vw;
+    animation: float 3s ease-in-out infinite 1.5s;
+  }
+
+  .float-badge .icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .float-badge .icon.green { background: #788c5d20; color: #788c5d; }
+  .float-badge .icon.blue { background: #6a9bcc20; color: #6a9bcc; }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  /* Corner decoration */
+  .corner-mark {
+    position: fixed;
+    bottom: 2vw;
+    right: 3vw;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    color: var(--text-tertiary);
+    letter-spacing: 0.05em;
+  }
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+
+<div class="container">
+  <div class="content">
+    <div class="badge">Chrome Extension</div>
+    <h1>HTML<br><span class="accent">Screenshot</span></h1>
+    <p class="subtitle">
+      将浏览器中的 HTML 设计稿按任意比例裁剪导出为 PNG。<br>
+      为封面设计师打造，一键完成。
+    </p>
+    <div class="features">
+      <div class="feature"><div class="feature-dot"></div>捕获当前标签页可视区</div>
+      <div class="feature"><div class="feature-dot"></div>预设比例：16:9 / 4:3 / 5:2 / 1:1</div>
+      <div class="feature"><div class="feature-dot"></div>自定义宽高比，支持任意比例</div>
+      <div class="feature"><div class="feature-dot"></div>居中裁剪，一键下载 PNG</div>
+    </div>
+    <a class="cta" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Capture Now
+    </a>
+  </div>
+
+  <div class="demo">
+    <div class="browser">
+      <div class="browser-bar">
+        <div class="browser-dots">
+          <span></span><span></span><span></span>
+        </div>
+        <div class="browser-url">localhost:8000/cover.html</div>
+      </div>
+      <div class="browser-content">
+        <div class="design-preview">
+          <div class="design-card">
+            <div class="bar accent short"></div>
+            <div class="bar medium"></div>
+            <div class="bar short"></div>
+            <div class="block"></div>
+          </div>
+          <div class="design-card">
+            <div class="block"></div>
+            <div class="bar medium"></div>
+            <div class="bar accent short"></div>
+          </div>
+        </div>
+        <div class="crop-overlay r169">
+          <div class="crop-label">16:9</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ratio-selector">
+      <div class="ratio-pill active">16:9</div>
+      <div class="ratio-pill dimmed">4:3</div>
+      <div class="ratio-pill dimmed">5:2</div>
+      <div class="ratio-pill dimmed">1:1</div>
+      <div class="ratio-pill dimmed">Custom</div>
+    </div>
+
+    <div class="float-badge top-right">
+      <div class="icon green">✓</div>
+      <span>5:2 · X Article</span>
+    </div>
+
+    <div class="float-badge bottom-left">
+      <div class="icon blue">⌘</div>
+      <span>One-click PNG</span>
+    </div>
+  </div>
+</div>
+
+<div class="corner-mark">HTML Screenshot · Chrome Extension</div>
+
+</body>
+</html>
