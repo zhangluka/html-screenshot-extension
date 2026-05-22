@@ -8,9 +8,7 @@
 </p>
 
 
-<p align="center">
-  <img src="docs/ads.png" alt="HTML Screenshot intro" width="80">
-</p>
+  <img src="docs/ads.png" alt="HTML Screenshot intro">
 
 ## 为什么做这个
 
@@ -41,17 +39,12 @@ Snipaste 是优秀的通用截图工具，但在「HTML 设计稿 → 指定比�
 
 <!-- 演示截图占位：展示 popup 界面 -->
 <p align="center">
-  <img src="docs/popup-demo.png" alt="插件弹窗界面" width="220">
+  <img src="docs/popup-demo.png" alt="插件弹窗界面">
 </p>
 
 <!-- 演示截图占位：展示 preview 模式的裁剪框 -->
 <p align="center">
-  <img src="docs/preview-demo.png" alt="预览模式 - 可拖拽裁剪框" width="600">
-</p>
-
-<!-- 演示 GIF 占位：完整操作流程 -->
-<p align="center">
-  <img src="docs/workflow.gif" alt="完整操作流程" width="600">
+  <img src="docs/preview-demo.png" alt="预览模式 - 可拖拽裁剪框">
 </p>
 
 ## 安装
