@@ -7,6 +7,11 @@
   <img src="icons/icon128.png" alt="HTML Screenshot Icon" width="80">
 </p>
 
+
+<p align="center">
+  <img src="docs/ads.png" alt="HTML Screenshot intro" width="80">
+</p>
+
 ## 为什么做这个
 
 日常用 AI 生成 HTML 封面/海报/设计稿后，需要在浏览器中打开并截图保存。现有截图工具要么功能臃肿，要么没有精确的比例裁剪功能。这个扩展只做一件事：**按比例裁剪可视区，一键下载 PNG**。
