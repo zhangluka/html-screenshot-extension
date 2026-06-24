@@ -4,15 +4,17 @@ let isDragging = false;
 let dragStart = { x: 0, y: 0 };
 let cropStart = { x: 0, y: 0 };
 let currentRatio = [16, 9];
+let currentOutputMode = 'download';
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (msg.type === 'preview') {
     currentRatio = msg.ratio;
+    currentOutputMode = msg.outputMode || 'download';
     showOverlay(msg.ratio);
   } else if (msg.type === 'capture') {
     quickCapture(msg.ratio);
   } else if (msg.type === 'cropAndDownload') {
-    cropAndDownload(msg.dataUrl, msg.rect);
+    cropAndSave(msg.dataUrl, msg.rect);
   }
 });
 
@@ -267,12 +269,24 @@ function captureArea() {
 
   // Wait one frame for the hide to take effect, then capture
   requestAnimationFrame(() => {
-    chrome.runtime.sendMessage({ type: 'doCapture', rect });
+    chrome.runtime.sendMessage({ type: 'doCapture', rect, outputMode: currentOutputMode });
     removeOverlay();
   });
 }
 
-function cropAndDownload(dataUrl, rect) {
+async function copyBlobToClipboard(blob) {
+  try {
+    await navigator.clipboard.write([
+      new ClipboardItem({ 'image/png': blob })
+    ]);
+  } catch {
+    // Fallback: open image in new tab so user can copy manually
+    const url = URL.createObjectURL(blob);
+    window.open(url, '_blank');
+  }
+}
+
+function cropAndSave(dataUrl, rect) {
   const { x, y, w, h, dpr } = rect;
 
   const img = new Image();
@@ -289,14 +303,18 @@ function cropAndDownload(dataUrl, rect) {
     canvas.height = sh;
     ctx.drawImage(img, sx, sy, sw, sh, 0, 0, sw, sh);
 
-    canvas.toBlob(blob => {
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
-      a.download = `screenshot-${Math.round(w)}x${Math.round(h)}-${timestamp}.png`;
-      a.click();
-      URL.revokeObjectURL(url);
+    canvas.toBlob(async blob => {
+      if (currentOutputMode === 'copy') {
+        await copyBlobToClipboard(blob);
+      } else {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+        a.download = `screenshot-${Math.round(w)}x${Math.round(h)}-${timestamp}.png`;
+        a.click();
+        URL.revokeObjectURL(url);
+      }
     }, 'image/png');
   };
   img.src = dataUrl;

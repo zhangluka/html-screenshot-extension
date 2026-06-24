@@ -95,6 +95,29 @@
     opacity: 0.5;
     cursor: not-allowed;
   }
+  .mode-row {
+    display: flex;
+    gap: 0;
+    margin-bottom: 12px;
+    border: 1px solid rgba(20,20,19,0.1);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .mode-btn {
+    flex: 1;
+    padding: 5px 0;
+    border: none;
+    background: #fff;
+    color: #87867f;
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .mode-btn.active {
+    background: #141413;
+    color: #faf9f5;
+  }
 </style>
 </head>
 <body>
@@ -103,12 +126,17 @@
     <button class="ratio-btn active" data-ratio="16:9">16:9</button>
     <button class="ratio-btn" data-ratio="4:3">4:3</button>
     <button class="ratio-btn" data-ratio="5:2">5:2</button>
+    <button class="ratio-btn" data-ratio="2.35:1">2.35:1</button>
     <button class="ratio-btn" data-ratio="1:1">1:1</button>
   </div>
   <div class="custom-row">
-    <input type="number" id="cw" value="16" min="1" max="100">
+    <input type="number" id="cw" value="16" min="0.01" max="100" step="any">
     <span>:</span>
-    <input type="number" id="ch" value="9" min="1" max="100">
+    <input type="number" id="ch" value="9" min="0.01" max="100" step="any">
+  </div>
+  <div class="mode-row">
+    <button class="mode-btn active" data-mode="download">⬇ Download</button>
+    <button class="mode-btn" data-mode="copy">📋 Copy</button>
   </div>
   <div class="btn-row">
     <button class="btn btn-preview" id="preview">Preview</button>

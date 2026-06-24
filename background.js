@@ -8,7 +8,8 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
         chrome.tabs.sendMessage(sender.tab.id, {
           type: 'cropAndDownload',
           dataUrl,
-          rect: msg.rect
+          rect: msg.rect,
+          outputMode: msg.outputMode || 'download'
         });
       })
       .catch(err => console.error('Capture failed:', err));

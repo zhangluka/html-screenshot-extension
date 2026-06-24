@@ -1,10 +1,12 @@
 const presetBtns = document.querySelectorAll('.ratio-btn');
+const modeBtns = document.querySelectorAll('.mode-btn');
 const cwInput = document.getElementById('cw');
 const chInput = document.getElementById('ch');
 const previewBtn = document.getElementById('preview');
 const captureBtn = document.getElementById('capture');
 
 let selectedRatio = [16, 9];
+let outputMode = 'download'; // 'download' or 'copy'
 
 presetBtns.forEach(btn => {
   btn.addEventListener('click', () => {
@@ -24,17 +26,41 @@ presetBtns.forEach(btn => {
   });
 });
 
+modeBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    modeBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    outputMode = btn.dataset.mode;
+  });
+});
+
 // Preview: show draggable crop overlay
 previewBtn.addEventListener('click', async () => {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-  await chrome.tabs.sendMessage(tab.id, {
-    type: 'preview',
-    ratio: selectedRatio
-  });
+  const msg = { type: 'preview', ratio: selectedRatio, outputMode };
+  try {
+    await chrome.tabs.sendMessage(tab.id, msg);
+  } catch {
+    await chrome.scripting.executeScript({ target: { tabId: tab.id }, files: ['content.js'] });
+    await chrome.tabs.sendMessage(tab.id, msg);
+  }
   window.close();
 });
 
-// Capture: directly crop centered and download
+// Copy blob to clipboard
+async function copyBlobToClipboard(blob) {
+  try {
+    await navigator.clipboard.write([
+      new ClipboardItem({ 'image/png': blob })
+    ]);
+  } catch {
+    // Fallback: open image in new tab so user can copy manually
+    const url = URL.createObjectURL(blob);
+    chrome.tabs.create({ url });
+  }
+}
+
+// Capture: directly crop centered and download/copy
 captureBtn.addEventListener('click', async () => {
   captureBtn.textContent = '...';
   captureBtn.disabled = true;
@@ -70,14 +96,18 @@ captureBtn.addEventListener('click', async () => {
     canvas.height = cropH;
     ctx.drawImage(img, cropX, cropY, cropW, cropH, 0, 0, cropW, cropH);
 
-    canvas.toBlob(blob => {
-      const url = URL.createObjectURL(blob);
-      const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
-      chrome.downloads.download({
-        url: url,
-        filename: `screenshot-${selectedRatio[0]}x${selectedRatio[1]}-${timestamp}.png`,
-        saveAs: false
-      });
+    canvas.toBlob(async blob => {
+      if (outputMode === 'copy') {
+        await copyBlobToClipboard(blob);
+      } else {
+        const url = URL.createObjectURL(blob);
+        const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+        chrome.downloads.download({
+          url: url,
+          filename: `screenshot-${selectedRatio[0]}x${selectedRatio[1]}-${timestamp}.png`,
+          saveAs: false
+        });
+      }
       window.close();
     }, 'image/png');
   };
